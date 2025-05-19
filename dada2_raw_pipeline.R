@@ -317,6 +317,9 @@ seqtab.filtered <- seqtab[,nchar(colnames(seqtab)) %in% seq(400,430)]
 # In this case, the default setting minFoldParentOverabundance = 2 may be too stringent for pooled chimera removal, consider setting this to 8 (or maybe 4, 6, etc.).
 seqtab.nochim <- removeBimeraDenovo(seqtab.filtered, multithread=T, verbose=TRUE)
 
+# Save table with the non-chimeric sequences as rds-file:
+saveRDS(seqtab.nochim, "16S_seqtab_nochim.rds")
+
 # It is possible that a large fraction of the total number of UNIQUE SEQUENCES will be chimeras.
 # However, this is usually not the case for the majority of the READS.
 # Calculate percentage of the reads that were non-chimeric:
