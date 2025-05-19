@@ -9,6 +9,27 @@
 
 ## Also, special shout out to Nauras Daraghmeh (https://github.com/naurasd) who created the skeleton much of this is adapted from
 
+# Install necessary packages
+if (!requireNamespace("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("dada2") # if this does not work, try to install via devtools (requires prior installation of devtools)
+BiocManager::install("ShortRead")
+BiocManager::install("Biostrings")
+
+# If dada2 installation failed via BiocManager, try to install via devtools (requires prior installation of devtools)
+install.packages("devtools") # If not installed prior
+library("devtools")
+devtools::install_github("benjjneb/dada2")
+
+# We will also use some functions of ggplot2 to plot read quality profiles.
+# If not done prior, install ggplot2 via:
+install.packages("ggplot2")
+# Or if this fails:
+install.packages("devtools") # If not installed prior
+library("devtools")
+devtools::install_github("tidyverse/ggplot2")
+
 ## DADA2 16S workflow with cutadapt primer removal ##
 
 # Load required packages
