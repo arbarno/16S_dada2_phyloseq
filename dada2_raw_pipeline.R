@@ -237,6 +237,9 @@ out <- filterAndTrim(cutFs, filtFs, cutRs, filtRs, maxN = 0, truncLen=c(220,220)
 # check how many reads remain after filtering
 out
 
+# Save this output as RDS file:
+saveRDS(out, "filter_and_trim_out_16S_run1.rds")
+
 # Check number of reads in the files
 #countFastq(filtFs)
 #countFastq(filtRs)
@@ -254,6 +257,10 @@ set.seed(1) # set seed to ensure that randomized steps are replicable
 errF <- learnErrors(filtFs, multithread=T)
 errR <- learnErrors(filtRs, multithread=T)
 
+# save error calculation as RDS files:
+saveRDS(errF, "errF_16S_run1.rds")
+saveRDS(errR, "errR_16S_run1.rds")
+
 # Visualize the estimated error rates:
 plotErrors(errF, nominalQ = TRUE)
 plotErrors(errR, nominalQ = TRUE)
@@ -261,6 +268,10 @@ plotErrors(errR, nominalQ = TRUE)
 # Apply the dada2's core sequence-variant inference algorithm:
 dadaFs <- dada(derepFs, err=errF, multithread=T,pool="pseudo")
 dadaRs <- dada(derepRs, err=errR, multithread=T,pool="pseudo")
+
+# Save sequence-variant inference as RDS files which may be uploaded in case R crashes: 
+saveRDS(dadaFs, "dadaFs_16S_run1.rds")
+saveRDS(dadaRs, "dadaRs_16S_run1.rds")
 
 # Inspecting the returned dada-class object of the first sample:
 dadaFs[[1]]
@@ -274,6 +285,8 @@ mergers <- mergePairs(dadaFs, derepFs, dadaRs, derepRs, minOverlap = 10, maxMism
 # See here for output explanation: https://www.rdocumentation.org/packages/dada2/versions/1.0.3/topics/mergePairs
 head(mergers[[1]])
 
+saveRDS(mergers,"mergers_16S_run1.rds")
+
 # Construct an amplicon sequence variant table (ASV) table
 # If maxMismatch > 0 has been allowed in the mergePairs step,
 # "Duplicate sequences detected and merged" may appear as output during the sequence table creation. This is not a problem.
@@ -282,8 +295,11 @@ seqtab <- makeSequenceTable(mergers)
 # How many sequence variants were inferred?
 dim(seqtab)
 
+# Save sequence table
+saveRDS(seqtab, "16S_seqtab_run1.rds")
+
 ## Run the following steps if your reads were generated in a single sequencing run:
-## If samples were not obtained using a single sequencing run, other steps will be implemented
+## If samples were not obtained using a single sequencing run, use the dada2_raw_multiple_runs.R pipeline
 
 # Inspect distribution of sequence lengths
 table(nchar(getSequences(seqtab)))
