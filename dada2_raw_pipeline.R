@@ -340,6 +340,9 @@ sum(seqtab.nochim)/sum(seqtab)
 # boostrapping has not been necessary, but can still be included
 taxa.70 <- assignTaxonomy(seqtab.nochim, "silva_nr99_v138.2_toGenus_trainset.fa.gz", minBoot=70, multithread=T,tryRC=TRUE, outputBootstraps = T)
 
+# Save the taxa70 object as rds file
+saveRDS(taxa.70$tax,"taxa70.rds")
+
 # Check the structure of the taxa.70 object
 # The taxa.70$tax list contains the taxonomy
 # The taxa.70$boot list contains the bootstrap values for each taxonomic level
